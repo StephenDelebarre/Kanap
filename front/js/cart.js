@@ -1,5 +1,6 @@
 const productInfos = document.getElementById("cart__items")
 let numberOfProduct = localStorage.getItem.length
+localStorage.getItem("Product", JSON.parse(productInfos));
 
 for (let i = 0; i < numberOfProduct; i++) {
     fetch("http://localhost:3000/api/products")

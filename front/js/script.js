@@ -41,7 +41,9 @@ fetch("http://localhost:3000/api/products")
 
                         const productDescription = document.createElement("p");
                         productDescription.innerText = product.description;
+                        productDescription.className = "productDescription"
                         articleSection.appendChild(productDescription);
+                        
                     }
                 })
             }
