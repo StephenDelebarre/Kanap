@@ -8,7 +8,6 @@ const descriptionProduct = document.getElementById("description")
 const colorsProduct = document.querySelector("#colors")
 const btnCart = document.querySelector("#addToCart")
 const quantityProduct = document.querySelector("#quantity")
-let storage = null
 
 
 fetch('http://localhost:3000/api/products/'+ id)
@@ -65,92 +64,79 @@ function afficherProduit(addInfo){
     }
 }
 
+/* fonction qui ajoute les produits au panier */ 
 
-
-// function getProductFromLocalStorage() {
-
-//     let products = localStorage.getItem("Product")
-
-//     if (!products) {
-//         return {}
-//     }
-
-//     return JSON.parse(products)
-// }
-
-// function addProductToLocalStorage() {
-
-//     let productInfos = {
-//         id: product._id,
-//         color: colorsProduct.value,
-//         quantity: quantityProduct.value
-//     };
-
-//     localStorage.setItem("Product", JSON.stringify(productInfos));
-
-
-// }
-
-
-
-
-// une fonction qui permet de rajouter un produit dans le panier
-// elle prend en parametre le produit à rajouter
-function ajouterProduitPanier (){
+function ajouterProduitPanier (produit){ // fonction
     
-    // console.log("quantity",quantityProduct.value)
-    // console.log("colors product",colorsProduct.value)
-    
-    // console.log("product infos",productInfos)*
+    let quantity = quantityProduct.value // on stock la valeur de quantité dans une variable
+    let color = colorsProduct.value // on stock la couleur dans une variable
+    let storage = JSON.parse(localStorage.getItem("Product")) // on récupére les données du localstorage sous forme d'objet et on stock dans une variable
 
-    let quantity = quantityProduct.value
-    let color = colorsProduct.value
-    let storage = JSON.parse(localStorage.getItem("Product"))
+    console.log("quantity",quantityProduct.value) // on vérifie la valeur de quantity
+    console.log("colors product",colorsProduct.value) // on vérifie la valeur de color
 
-    
+    if (quantity > 0 && quantity <= 100 && color != "") { // condition si la quantité est entre 1 et 100 et si la couleur est séléctionnée
 
-
-    if (quantity > 0 && quantity <= 100 && color != "") {
-
-        let productInfos = {
-            id: product._id,
+        // Merci de rajouter les autres proprietes du produit (nom,description, image url, alt text...)
+        // dans productInfos excepter le prix
+        let productInfos = { // on créer un objet pour y stocker les valeur de nos produits
+            id: produit._id,
             color: colorsProduct.value,
-            quantity: Number(quantityProduct.value)
+            quantity: Number(quantityProduct.value),
+        //     name: product.name,
+        //     description: product.description,
+        //     image: product.imageUrl,
+        //     altTxt: product.altTxt
         };
 
-        if(storage) {
-            const resultatRecherche = storage.find((element) => element.id === product._id && element.color === product.color)
+        console.log("product infos",productInfos); // on vérifie les information du produits séléctionné
 
-            console.log(resultatRecherche)
-            console.log(productS)
-            console.log(productInfos.quantity)
-            console.log(productInfos.color)
+        if(storage) { // condition si il y a quelque chose dans le localstorage
 
-            if(resultatRecherche) {
-                productInfos.quantity = parseInt(productInfos.quantity) + parseInt(resultatRecherche.quantity)
+            let resultatRecherche = storage.find((element) => element.id === productInfos.id && element.color === productInfos.color) //on cherche dans le local storage si un produit à le même id et la même couleur qu'un produit déjà existant
 
-                localStorage.setItem("Product", JSON.stringify(productS));
+            if(resultatRecherche) { // condition si on à trouvé un produit avec le même id et la même couleur que le produit séléctionné
 
-            } else {
-                productS.push(productInfos)
+                let qte = parseInt(resultatRecherche.quantity) + parseInt(productInfos.quantity); // on convertie la valeur de quantité du produit stocké dans le localstorage et la quantité séléctionné et on le stock dans une variable
 
-                localStorage.setItem("Product", JSON.stringify(productS));
+                resultatRecherche.quantity = qte; // défini la nouvelle quantité avec les 2 quantité additionnnées
+
+                localStorage.setItem("Product", JSON.stringify(storage)); // on créer un objet avec la nouvelle quantité et on l'ajoute au localstorage
+
+                console.log("produit rechercher",resultatRecherche); // on vérifie les nouvelles valeur de quantité
+
+            } else { // dans le cas ou on ne trouve pas un produit avec le même id et la même couleur
+
+                storage.push(productInfos) // on ajoute le produit au localstorage
+
+                localStorage.setItem("Product", JSON.stringify(storage)); // on créer un nouvel objet et on le sauvegarde dans le localstorage
+
+                console.log("Storage dans if",storage); // on vérifie le localstorage
+
             }
-        
         }
 
         else {
-            productS.push(productInfos)
-            localStorage.setItem("Product", JSON.stringify(productS));
+
+            storage = []; // on défini le local storage comme tableau
+
+            storage.push(productInfos) // on y ajoute notre objet et on le stock dans notre tableau
+
+            localStorage.setItem("Product", JSON.stringify(storage)); // on créer un nouvel objet dans le tableau du localstorage
+
+            console.log("Storage lorsqu'il n'existe pas",storage);
+
         }
     }
 }
 
 
 btnCart.addEventListener('click', e => {
+
     ajouterProduitPanier(product);
     
 })
+
 
 
 

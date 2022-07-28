@@ -46,6 +46,13 @@ h2 {
 .cart__item__content__settings p {
 	margin: 0;
 }
+
+.cart__item__content__description__emptyCart{
+	display: flex;
+	justify-content: center;
+	font-size: 22px;
+}
+
 .cart__item__content__settings input {
 	color: var(--footer-secondary-color);
 	font-family: 'Montserrat', sans-serif;
