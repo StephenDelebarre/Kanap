@@ -1,3 +1,5 @@
+// requête fetch pour venir récupérer les données du serveur
+
 fetch("http://localhost:3000/api/products")
 
     .then(response => {
@@ -48,15 +50,3 @@ fetch("http://localhost:3000/api/products")
                 })
             }
         })
-
-/* récuperer les products de l'API
-récuperer la réponse émise par l'API et la parcourir pour insérer chaque product dans la page d'accueil de façon dynamique*/
-
-/* utiliser la méthode fetch pour récupérer les données du serveur
-faire une promesse de réponse avec .then
-vérifier la réponse
-si il y a réponse, traduire les données en json
-faire une nouvelle promesse avec les actions a effectuer dans la fonction
-faire une boucle pour parcourir tout les éléments du serveur, qui insérera les information à chaque itération selon le nombre de products
-récupérer les propriétés de la section items et les stocker dans une variable
-créer les éléments html et y insérer les données correspondantes depuis le serveur */
